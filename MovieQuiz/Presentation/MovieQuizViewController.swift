@@ -1,10 +1,19 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController {
+    @IBOutlet weak var labelForFontTest: UILabel!
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .link
+        // распечатать список доступных шрифтов
+        for family: String in UIFont.familyNames{
+                      print(family)
+                      for names: String in UIFont.fontNames(forFamilyName: family){
+                          print("== \(names)")
+                      }
+                  }
+        labelForFontTest.font = UIFont(name: "YSDisplay-Medium", size: 22)
     }
 }
 

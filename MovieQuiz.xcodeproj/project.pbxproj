@@ -50,8 +50,8 @@
 		30C7974C2A4982AB007B36C9 /* MovieQuizFonts */ = {
 			isa = PBXGroup;
 			children = (
-				30C7974D2A4982AB007B36C9 /* YS Display-Bold.ttf */,
 				30C7974E2A4982AB007B36C9 /* YS Display-Medium.ttf */,
+				30C7974D2A4982AB007B36C9 /* YS Display-Bold.ttf */,
 			);
 			path = MovieQuizFonts;
 			sourceTree = "<group>";
