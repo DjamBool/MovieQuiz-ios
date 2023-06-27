@@ -2,10 +2,15 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController {
     @IBOutlet weak var labelForFontTest: UILabel!
+    // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> аутлеты для кнопок:
+    @IBOutlet private weak var noButton: UIButton!
+    @IBOutlet private weak var yesButton: UIButton!
+    
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .link
+// view.backgroundColor = .link
         // распечатать список доступных шрифтов
         for family: String in UIFont.familyNames{
                       print(family)
@@ -14,6 +19,9 @@ final class MovieQuizViewController: UIViewController {
                       }
                   }
         labelForFontTest.font = UIFont(name: "YSDisplay-Medium", size: 22)
+        
+        noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
     }
 }
 
