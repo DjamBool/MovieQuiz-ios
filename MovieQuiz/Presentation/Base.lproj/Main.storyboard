@@ -18,15 +18,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Какой-то текст" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WPR-Zu-39F">
-                                <rect key="frame" x="20" y="64" width="374" height="51"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="51" id="vjU-PL-IPt"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="25"/>
-                                <color key="textColor" red="0.97616332770000003" green="0.67781595370968539" blue="0.34797368109702975" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ncr-Qo-Odv" userLabel="No Button">
                                 <rect key="frame" x="20" y="802" width="177" height="60"/>
                                 <color key="backgroundColor" name="YP White "/>
@@ -60,24 +51,28 @@
                                     </userDefinedRuntimeAttribute>
                                 </userDefinedRuntimeAttributes>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Вопрос:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="33v-of-eac">
+                                <rect key="frame" x="20" y="54" width="64.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black "/>
                         <constraints>
+                            <constraint firstItem="33v-of-eac" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="3D0-eF-2dX"/>
                             <constraint firstItem="c4O-RQ-pFM" firstAttribute="leading" secondItem="Ncr-Qo-Odv" secondAttribute="trailing" constant="20" id="9Fy-UB-nbq"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="c4O-RQ-pFM" secondAttribute="trailing" constant="20" id="JS2-XK-XyS"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ncr-Qo-Odv" secondAttribute="bottom" id="S2t-Cc-4mI"/>
-                            <constraint firstItem="WPR-Zu-39F" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="ZM5-6u-sPW"/>
-                            <constraint firstItem="WPR-Zu-39F" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="hjL-IO-fas"/>
+                            <constraint firstItem="33v-of-eac" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="YVu-PE-Tob"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="c4O-RQ-pFM" secondAttribute="bottom" id="iiu-zD-t1Z"/>
                             <constraint firstItem="Ncr-Qo-Odv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="k3p-55-gU9"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WPR-Zu-39F" secondAttribute="trailing" constant="20" id="pNu-yj-4F1"/>
                             <constraint firstItem="c4O-RQ-pFM" firstAttribute="width" secondItem="Ncr-Qo-Odv" secondAttribute="width" id="qkw-cW-L6q"/>
                             <constraint firstItem="c4O-RQ-pFM" firstAttribute="height" secondItem="Ncr-Qo-Odv" secondAttribute="height" id="rLp-hY-VXJ"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="labelForFontTest" destination="WPR-Zu-39F" id="GUa-cL-ySO"/>
                         <outlet property="noButton" destination="Ncr-Qo-Odv" id="PrI-SU-rlI"/>
                         <outlet property="yesButton" destination="c4O-RQ-pFM" id="yVy-Nd-wWX"/>
                     </connections>
