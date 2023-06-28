@@ -5,20 +5,27 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
     
+    @IBOutlet private weak var questionTitleLabel: UILabel!
+    @IBOutlet private weak var indexLabel: UILabel!
     @IBOutlet private weak var questionLabel: UILabel!
     
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // если шрифт есть - назначить его для title кнопки
+        installFont()
+    }
+    
+    // функция назначения шрифта для title кнопок и лейблов, если такой шрифт есть
+    private func installFont() {
         for family: String in UIFont.familyNames{
             for names: String in UIFont.fontNames(forFamilyName: family){
                 if names == "YSDisplay-Medium" {
                     noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
                     yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
-                    questionLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+                    questionTitleLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+                    indexLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+                    questionLabel.font = UIFont(name: "YSDisplay-Bold", size: 23)
                 }
             }
         }
