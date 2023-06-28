@@ -5,6 +5,8 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
     
+    @IBOutlet private weak var questionLabel: UILabel!
+    
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -16,6 +18,7 @@ final class MovieQuizViewController: UIViewController {
                 if names == "YSDisplay-Medium" {
                     noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
                     yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
+                    questionLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
                 }
             }
         }

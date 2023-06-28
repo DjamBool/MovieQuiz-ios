@@ -18,62 +18,64 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ncr-Qo-Odv" userLabel="No Button">
-                                <rect key="frame" x="20" y="802" width="177" height="60"/>
-                                <color key="backgroundColor" name="YP White "/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="td6-hX-Unm">
+                                <rect key="frame" x="20" y="802" width="374" height="60"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4O-RQ-pFM" userLabel="Yes Button">
+                                        <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
+                                        <color key="backgroundColor" name="YP White "/>
+                                        <color key="tintColor" systemColor="linkColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Да">
+                                            <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="22"/>
+                                            <color key="baseForegroundColor" name="YP Black "/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ncr-Qo-Odv" userLabel="No Button">
+                                        <rect key="frame" x="197" y="0.0" width="177" height="60"/>
+                                        <color key="backgroundColor" name="YP White "/>
+                                        <color key="tintColor" systemColor="linkColor"/>
+                                        <state key="normal" title="Button"/>
+                                        <buttonConfiguration key="configuration" style="plain" title="Нет">
+                                            <fontDescription key="titleFontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
+                                            <color key="baseForegroundColor" name="YP Black "/>
+                                        </buttonConfiguration>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="15"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </button>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="60" id="nMj-FF-ND6"/>
+                                    <constraint firstAttribute="height" constant="60" id="XDz-ak-NBG"/>
                                 </constraints>
-                                <color key="tintColor" systemColor="linkColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Нет">
-                                    <fontDescription key="titleFontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="22"/>
-                                    <color key="baseForegroundColor" name="YP Black "/>
-                                </buttonConfiguration>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="15"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c4O-RQ-pFM" userLabel="Yes Button">
-                                <rect key="frame" x="217" y="802" width="177" height="60"/>
-                                <color key="backgroundColor" name="YP White "/>
-                                <color key="tintColor" systemColor="linkColor"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" title="Да">
-                                    <fontDescription key="titleFontDescription" name="Helvetica" family="Helvetica" pointSize="22"/>
-                                    <color key="baseForegroundColor" name="YP Black "/>
-                                </buttonConfiguration>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="15"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                            </button>
+                            </stackView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Вопрос:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="33v-of-eac">
-                                <rect key="frame" x="20" y="54" width="64.5" height="21"/>
+                                <rect key="frame" x="20" y="54" width="64.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
+                                <color key="textColor" name="YP White "/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black "/>
                         <constraints>
-                            <constraint firstItem="33v-of-eac" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="3D0-eF-2dX"/>
-                            <constraint firstItem="c4O-RQ-pFM" firstAttribute="leading" secondItem="Ncr-Qo-Odv" secondAttribute="trailing" constant="20" id="9Fy-UB-nbq"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="c4O-RQ-pFM" secondAttribute="trailing" constant="20" id="JS2-XK-XyS"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ncr-Qo-Odv" secondAttribute="bottom" id="S2t-Cc-4mI"/>
-                            <constraint firstItem="33v-of-eac" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="YVu-PE-Tob"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="c4O-RQ-pFM" secondAttribute="bottom" id="iiu-zD-t1Z"/>
-                            <constraint firstItem="Ncr-Qo-Odv" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="k3p-55-gU9"/>
-                            <constraint firstItem="c4O-RQ-pFM" firstAttribute="width" secondItem="Ncr-Qo-Odv" secondAttribute="width" id="qkw-cW-L6q"/>
-                            <constraint firstItem="c4O-RQ-pFM" firstAttribute="height" secondItem="Ncr-Qo-Odv" secondAttribute="height" id="rLp-hY-VXJ"/>
+                            <constraint firstItem="td6-hX-Unm" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="2e5-8l-TfS"/>
+                            <constraint firstItem="td6-hX-Unm" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="GII-gx-sqG"/>
+                            <constraint firstItem="33v-of-eac" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Xx7-dF-ptv"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="td6-hX-Unm" secondAttribute="bottom" id="dQM-UJ-oJX"/>
+                            <constraint firstItem="33v-of-eac" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="fgB-L7-ULX"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="noButton" destination="Ncr-Qo-Odv" id="PrI-SU-rlI"/>
+                        <outlet property="questionLabel" destination="33v-of-eac" id="Fir-rS-q7w"/>
                         <outlet property="yesButton" destination="c4O-RQ-pFM" id="yVy-Nd-wWX"/>
                     </connections>
                 </viewController>
