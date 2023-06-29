@@ -1,9 +1,11 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController {
-    // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> аутлеты для кнопок:
-    @IBOutlet private weak var noButton: UIButton!
-    @IBOutlet private weak var yesButton: UIButton!
+    
+    // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
+    
+    @IBOutlet weak var noButton: UIButton!
+    @IBOutlet weak var yesButton: UIButton!
     
     @IBOutlet private weak var questionTitleLabel: UILabel!
     @IBOutlet private weak var indexLabel: UILabel!
@@ -16,20 +18,15 @@ final class MovieQuizViewController: UIViewController {
         installFont()
     }
     
-    // функция назначения шрифта для title кнопок и лейблов, если такой шрифт есть
+    
     private func installFont() {
-        for family: String in UIFont.familyNames{
-            for names: String in UIFont.fontNames(forFamilyName: family){
-                if names == "YSDisplay-Medium" {
-                    noButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
-                    yesButton.titleLabel?.font = UIFont(name: "YSDisplay-Medium", size: 20)
-                    questionTitleLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
-                    indexLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
-                    questionLabel.font = UIFont(name: "YSDisplay-Bold", size: 23)
-                }
-            }
-        }
+        noButton.titleLabel?.font = UIFont.init(name: "YSDisplay-Medium", size: 20)
+        yesButton.setFont() // extension UIButton: YandexFontProtocol
+        questionTitleLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        indexLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
+        questionLabel.font = UIFont(name: "YSDisplay-Bold", size: 23)
     }
+    
 }
 
 /*
