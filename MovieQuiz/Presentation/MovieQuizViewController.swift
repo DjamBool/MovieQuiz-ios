@@ -1,7 +1,7 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController {
-    
+    // MARK: - свойства
     // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
     @IBOutlet weak var noButton: UIButton!
     @IBOutlet weak var yesButton: UIButton!
@@ -65,7 +65,7 @@ final class MovieQuizViewController: UIViewController {
         show(quiz: convert(model: questions[0]))
     }
     
-    
+    // MARK: - методы
     @IBAction func noButtonClicked(_ sender: Any) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false
@@ -92,14 +92,57 @@ final class MovieQuizViewController: UIViewController {
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
-    
     // приватный метод, который меняет цвет рамки
     // принимает на вход булевое значение и ничего не возвращает
     private func showAnswerResult(isCorrect: Bool) {
+        if isCorrect {
+                correctAnswers += 1
+            }
         //imageView.layer.masksToBounds = true // 1
         imageView.layer.borderWidth = 8 // 2
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         
+        // запускаем задачу через 1 секунду c помощью диспетчера задач
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+           // код, который мы хотим вызвать через 1 секунду
+           self.showNextQuestionOrResults()
+        }
+    }
+    
+    private func showNextQuestionOrResults() {
+      if currentQuestionIndex == questions.count - 1 { // 1
+          let text = "Ваш результат: \(correctAnswers)/10"
+          let viewModel = QuizResultsViewModel(
+            title: "Этот раунд окончен!",
+            text: text,
+            buttonText: "Сыграть ещё раз")
+          show(quiz: viewModel)
+          installBorder()
+      } else { // 2
+        currentQuestionIndex += 1
+        // идём в состояние "Вопрос показан"
+          let nextQuestion = questions[currentQuestionIndex]
+          let viewModel = convert(model: nextQuestion)
+          installBorder()
+          show(quiz: viewModel)
+      }
+    }
+    
+    // приватный метод для показа результатов раунда квиза
+    // принимает вью модель QuizResultsViewModel и ничего не возвращает
+    private func show(quiz result: QuizResultsViewModel) {
+        let alert = UIAlertController(title: result.title,
+                                      message: result.text,
+                                      preferredStyle: .alert)
+        let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+               let firstQuestion = self.questions[self.currentQuestionIndex]
+               let viewModel = self.convert(model: firstQuestion)
+               self.show(quiz: viewModel)
+        }
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
     }
     
     private func installFont() {
@@ -138,6 +181,16 @@ final class MovieQuizViewController: UIViewController {
         let question: String
         // строка с порядковым номером этого вопроса (ex. "1/10")
         let questionNumber: String
+    }
+    
+    // для состояния "Результат квиза"
+    struct QuizResultsViewModel {
+      // строка с заголовком алерта
+      let title: String
+      // строка с текстом о количестве набранных очков
+      let text: String
+      // текст для кнопки алерта
+      let buttonText: String
     }
 }
 
