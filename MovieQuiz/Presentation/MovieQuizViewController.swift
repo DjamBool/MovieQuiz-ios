@@ -63,8 +63,11 @@ final class MovieQuizViewController: UIViewController {
         installFont()
         installBorder()
         show(quiz: convert(model: questions[0]))
+        
     }
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+            return .lightContent
+     }
     // MARK: - методы
     @IBAction func noButtonClicked(_ sender: Any) {
         let currentQuestion = questions[currentQuestionIndex]

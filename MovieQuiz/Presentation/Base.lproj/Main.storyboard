@@ -68,8 +68,7 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
                                                 <color key="backgroundColor" name="YP White "/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="39Y-tH-aij"/>
-                                                    <constraint firstAttribute="height" constant="60" id="dUX-zM-sh6"/>
+                                                    <constraint firstAttribute="height" constant="60" id="BWW-6o-n4W"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="AmericanTypewriter-Bold" family="American Typewriter" pointSize="20"/>
                                                 <color key="tintColor" name="YP Black "/>
@@ -88,8 +87,7 @@
                                                 <rect key="frame" x="197" y="0.0" width="177" height="60"/>
                                                 <color key="backgroundColor" name="YP White "/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="60" id="LxM-zd-ssi"/>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="pte-4Z-1cT"/>
+                                                    <constraint firstAttribute="height" constant="60" id="agU-Su-tdj"/>
                                                 </constraints>
                                                 <fontDescription key="fontDescription" name="Copperplate-Bold" family="Copperplate" pointSize="20"/>
                                                 <color key="tintColor" name="YP Black "/>
