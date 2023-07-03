@@ -66,8 +66,8 @@ final class MovieQuizViewController: UIViewController {
         
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
-            return .lightContent
-     }
+        return .lightContent
+    }
     // MARK: - методы
     @IBAction func noButtonClicked(_ sender: Any) {
         let currentQuestion = questions[currentQuestionIndex]
@@ -99,39 +99,39 @@ final class MovieQuizViewController: UIViewController {
     // принимает на вход булевое значение и ничего не возвращает
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
-                correctAnswers += 1
-            }
-        //imageView.layer.masksToBounds = true // 1
-        imageView.layer.borderWidth = 8 // 2
+            correctAnswers += 1
+        }
+        //imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         noButton.isEnabled = false
         yesButton.isEnabled = false
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-           // код, который мы хотим вызвать через 1 секунду
-           self.showNextQuestionOrResults()
+            // код, который мы хотим вызвать через 1 секунду
+            self.showNextQuestionOrResults()
             self.noButton.isEnabled = true
             self.yesButton.isEnabled = true
         }
     }
     
     private func showNextQuestionOrResults() {
-      if currentQuestionIndex == questions.count - 1 { // 1
-          let text = "Ваш результат: \(correctAnswers)/10"
-          let viewModel = QuizResultsViewModel(
-            title: "Этот раунд окончен!",
-            text: text,
-            buttonText: "Сыграть ещё раз")
-          show(quiz: viewModel)
-          installBorder()
-      } else { // 2
-        currentQuestionIndex += 1
-        // идём в состояние "Вопрос показан"
-          let nextQuestion = questions[currentQuestionIndex]
-          let viewModel = convert(model: nextQuestion)
-          installBorder()
-          show(quiz: viewModel)
-      }
+        if currentQuestionIndex == questions.count - 1 {
+            let text = "Ваш результат: \(correctAnswers)/10"
+            let viewModel = QuizResultsViewModel(
+                title: "Этот раунд окончен!",
+                text: text,
+                buttonText: "Сыграть ещё раз")
+            show(quiz: viewModel)
+            installBorder()
+        } else { // 2
+            currentQuestionIndex += 1
+            // идём в состояние "Вопрос показан"
+            let nextQuestion = questions[currentQuestionIndex]
+            let viewModel = convert(model: nextQuestion)
+            installBorder()
+            show(quiz: viewModel)
+        }
     }
     
     // приватный метод для показа результатов раунда квиза
@@ -143,9 +143,9 @@ final class MovieQuizViewController: UIViewController {
         let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-               let firstQuestion = self.questions[self.currentQuestionIndex]
-               let viewModel = self.convert(model: firstQuestion)
-               self.show(quiz: viewModel)
+            let firstQuestion = self.questions[self.currentQuestionIndex]
+            let viewModel = self.convert(model: firstQuestion)
+            self.show(quiz: viewModel)
         }
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
@@ -161,9 +161,9 @@ final class MovieQuizViewController: UIViewController {
     
     private func installBorder() {
         imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 1
-        imageView.layer.borderColor = UIColor.white.cgColor
         imageView.layer.cornerRadius = 6
+        //imageView.layer.borderWidth = 1
+        //imageView.layer.borderColor = UIColor.white.cgColor
     }
     
     // MARK: - models
@@ -191,12 +191,12 @@ final class MovieQuizViewController: UIViewController {
     
     // для состояния "Результат квиза"
     struct QuizResultsViewModel {
-      // строка с заголовком алерта
-      let title: String
-      // строка с текстом о количестве набранных очков
-      let text: String
-      // текст для кнопки алерта
-      let buttonText: String
+        // строка с заголовком алерта
+        let title: String
+        // строка с текстом о количестве набранных очков
+        let text: String
+        // текст для кнопки алерта
+        let buttonText: String
     }
 }
 
