@@ -112,6 +112,7 @@ final class MovieQuizViewController: UIViewController {
             self.showNextQuestionOrResults()
             self.noButton.isEnabled = true
             self.yesButton.isEnabled = true
+            self.imageView.layer.borderWidth = 0
         }
     }
     
@@ -161,7 +162,7 @@ final class MovieQuizViewController: UIViewController {
     
     private func installBorder() {
         imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = 6
+        imageView.layer.cornerRadius = 20
         //imageView.layer.borderWidth = 1
         //imageView.layer.borderColor = UIColor.white.cgColor
     }
