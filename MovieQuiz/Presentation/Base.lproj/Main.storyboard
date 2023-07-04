@@ -44,7 +44,7 @@
                                         <rect key="frame" x="0.0" y="44" width="374" height="561"/>
                                         <color key="backgroundColor" name="YP White "/>
                                         <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" secondItem="HRj-3I-G5F" secondAttribute="height" multiplier="2:3" id="hb2-XW-vaS"/>
+                                            <constraint firstAttribute="width" secondItem="HRj-3I-G5F" secondAttribute="height" multiplier="2:3" id="hb2-XW-vaS"/>
                                         </constraints>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
@@ -55,7 +55,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="YSN-8I-Qqw" userLabel="Question Label">
                                         <rect key="frame" x="0.0" y="625" width="374" height="78"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" relation="lessThanOrEqual" constant="78" id="GDQ-gt-DaZ"/>
+                                            <constraint firstAttribute="height" constant="78" id="GDQ-gt-DaZ"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Zapfino" family="Zapfino" pointSize="23"/>
                                         <color key="textColor" name="YP White "/>
