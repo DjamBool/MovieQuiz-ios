@@ -3,8 +3,8 @@ import UIKit
 final class MovieQuizViewController: UIViewController {
     // MARK: - свойства
     // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
-    @IBOutlet weak var noButton: UIButton!
-    @IBOutlet weak var yesButton: UIButton!
+    @IBOutlet private weak var noButton: UIButton!
+    @IBOutlet private weak var yesButton: UIButton!
     
     @IBOutlet private weak var questionTitleLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
@@ -69,12 +69,12 @@ final class MovieQuizViewController: UIViewController {
         return .lightContent
     }
     // MARK: - методы
-    @IBAction func noButtonClicked(_ sender: Any) {
+    @IBAction private func noButtonClicked(_ sender: Any) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
-    @IBAction func yesButtonClicked(_ sender: Any) {
+    @IBAction private func yesButtonClicked(_ sender: Any) {
         let currentQuestion = questions[currentQuestionIndex]
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
@@ -101,7 +101,7 @@ final class MovieQuizViewController: UIViewController {
         if isCorrect {
             correctAnswers += 1
         }
-        //imageView.layer.masksToBounds = true
+        imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         noButton.isEnabled = false
@@ -154,7 +154,7 @@ final class MovieQuizViewController: UIViewController {
     
     private func installFont() {
         noButton.titleLabel?.font = UIFont.init(name: "YSDisplay-Medium", size: 20)
-        yesButton.setFont() // extension UIButton: YandexFontProtocol
+        yesButton.titleLabel?.font = UIFont.init(name: "YSDisplay-Medium", size: 20)
         questionTitleLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
         counterLabel.font = UIFont(name: "YSDisplay-Medium", size: 20)
         textLabel.font = UIFont(name: "YSDisplay-Bold", size: 23)
@@ -163,8 +163,6 @@ final class MovieQuizViewController: UIViewController {
     private func installBorder() {
         imageView.layer.masksToBounds = true
         imageView.layer.cornerRadius = 20
-        //imageView.layer.borderWidth = 1
-        //imageView.layer.borderColor = UIColor.white.cgColor
     }
     
     // MARK: - models
