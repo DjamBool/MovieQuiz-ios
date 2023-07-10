@@ -107,7 +107,9 @@ final class MovieQuizViewController: UIViewController {
         noButton.isEnabled = false
         yesButton.isEnabled = false
         // запускаем задачу через 1 секунду c помощью диспетчера задач
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in // слабая ссылка на self
+            guard let self = self else { return } // разворачиваем слабую ссылку
+            
             // код, который мы хотим вызвать через 1 секунду
             self.showNextQuestionOrResults()
             self.noButton.isEnabled = true
@@ -141,9 +143,13 @@ final class MovieQuizViewController: UIViewController {
         let alert = UIAlertController(title: result.title,
                                       message: result.text,
                                       preferredStyle: .alert)
-        let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
+        //   Добавлены слабые ссылки на self в замыкании, чтобы убрать Retain Cycles.
+        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
+            guard let self = self else { return } // разворачиваем слабую ссылку
+            
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
+        
             let firstQuestion = self.questions[self.currentQuestionIndex]
             let viewModel = self.convert(model: firstQuestion)
             self.show(quiz: viewModel)
