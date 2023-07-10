@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleAspectFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="ovE-K4-bTs">
-                                <rect key="frame" x="20" y="54" width="374" height="783"/>
+                                <rect key="frame" x="20" y="54" width="374" height="808"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleAspectFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Kec-K9-RHp">
                                         <rect key="frame" x="0.0" y="0.0" width="374" height="24"/>
@@ -40,29 +40,20 @@
                                             <constraint firstAttribute="height" constant="24" id="bQa-ii-K9w"/>
                                         </constraints>
                                     </stackView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" image="The Godfather" translatesAutoresizingMaskIntoConstraints="NO" id="HRj-3I-G5F" userLabel="Preview Image">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K4r-Va-CqB" userLabel="Preview Image">
                                         <rect key="frame" x="0.0" y="44" width="374" height="561"/>
-                                        <color key="backgroundColor" name="YP White "/>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="HRj-3I-G5F" secondAttribute="height" multiplier="2:3" id="hb2-XW-vaS"/>
+                                            <constraint firstAttribute="width" secondItem="K4r-Va-CqB" secondAttribute="height" multiplier="2:3" id="Cvh-hC-Ty3"/>
                                         </constraints>
-                                        <userDefinedRuntimeAttributes>
-                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                <integer key="value" value="20"/>
-                                            </userDefinedRuntimeAttribute>
-                                        </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Рейтинг этого фильма меньше, чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="YSN-8I-Qqw" userLabel="Question Label">
-                                        <rect key="frame" x="0.0" y="625" width="374" height="78"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="78" id="GDQ-gt-DaZ"/>
-                                        </constraints>
+                                        <rect key="frame" x="0.0" y="625" width="374" height="103"/>
                                         <fontDescription key="fontDescription" name="Zapfino" family="Zapfino" pointSize="23"/>
                                         <color key="textColor" name="YP White "/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleAspectFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="x2R-2K-xEJ">
-                                        <rect key="frame" x="0.0" y="723" width="374" height="60"/>
+                                        <rect key="frame" x="0.0" y="748" width="374" height="60"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" reversesTitleShadowWhenHighlighted="YES" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Wr-mA-di6">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
@@ -108,6 +99,12 @@
                                         </constraints>
                                     </stackView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="YSN-8I-Qqw" firstAttribute="top" secondItem="K4r-Va-CqB" secondAttribute="bottom" constant="20" id="4Rb-Wi-wgJ"/>
+                                    <constraint firstItem="YSN-8I-Qqw" firstAttribute="leading" secondItem="ovE-K4-bTs" secondAttribute="leading" id="nlD-fN-x1f"/>
+                                    <constraint firstItem="x2R-2K-xEJ" firstAttribute="top" secondItem="YSN-8I-Qqw" secondAttribute="bottom" constant="20" id="nyB-R1-85T"/>
+                                    <constraint firstAttribute="trailing" secondItem="YSN-8I-Qqw" secondAttribute="trailing" id="oig-YK-bMM"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
@@ -121,7 +118,7 @@
                     </view>
                     <connections>
                         <outlet property="counterLabel" destination="dLH-64-80E" id="Vx5-vl-VhV"/>
-                        <outlet property="imageView" destination="HRj-3I-G5F" id="a5P-al-jeV"/>
+                        <outlet property="imageView" destination="K4r-Va-CqB" id="DsP-Gd-b6v"/>
                         <outlet property="noButton" destination="L7i-qN-j6j" id="DYK-Cz-4kb"/>
                         <outlet property="questionTitleLabel" destination="r0v-yB-7ve" id="8eb-I1-CTv"/>
                         <outlet property="textLabel" destination="YSN-8I-Qqw" id="2X0-MS-gAq"/>
@@ -134,7 +131,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="The Godfather" width="1192" height="1716"/>
         <namedColor name="YP Black ">
             <color red="0.10199999809265137" green="0.10599999874830246" blue="0.13300000131130219" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
