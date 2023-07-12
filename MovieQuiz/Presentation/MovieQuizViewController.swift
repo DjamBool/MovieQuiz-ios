@@ -16,7 +16,7 @@ final class MovieQuizViewController: UIViewController {
     
     // новые свойства, откуда брать вопросы
     private let questionsAmount: Int = 10  // общее количество вопросов для квиза
-    private let questionFactory: QuestionFactory = QuestionFactory() // контроллер будет обращаться за вопросами
+    private let questionFactory: QuestionFactoryProtocol = QuestionFactory() // VC будет обращаться за вопросами
     private var currentQuestion: QuizQuestion? // текущий вопрос, который видит пользователь
     
     // MARK: - Lifecycle
