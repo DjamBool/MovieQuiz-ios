@@ -25,19 +25,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         super.viewDidLoad()
         installFont()
         installBorder()
-        /* show(quiz: convert(model: questions[0])) // мое
-        // изменение кода в соответствии с учебником:
-        let firstQuestion = questions[currentQuestionIndex]
-        let viewModel = convert(model: firstQuestion)
-        show(quiz: viewModel)
-        */
         questionFactory = QuestionFactory(delegate: self)
-       /* if let firstQuestion = questionFactory.requestNextQuestion() {
-            currentQuestion = firstQuestion
-            let viewModel = convert(model: firstQuestion)
-            show(quiz: viewModel)
-        }
-        */
         questionFactory?.requestNextQuestion()
     }
     
@@ -123,15 +111,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             installBorder()
         } else { // 2
             currentQuestionIndex += 1
-            // идём в состояние "Вопрос показан"
-           /*
-            if let nextQuestion = questionFactory.requestNextQuestion() {
-                currentQuestion = nextQuestion
-            let viewModel = convert(model: nextQuestion)
-            installBorder()
-            show(quiz: viewModel)
-            }
-            */
             self.questionFactory?.requestNextQuestion()
         }
     }
@@ -148,19 +127,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
-        
-//            let firstQuestion = self.questions[self.currentQuestionIndex]
-//            let viewModel = self.convert(model: firstQuestion)
-//            self.show(quiz: viewModel)
             self.questionFactory?.requestNextQuestion()
-           /*
-            if let firstQuestion = self.questionFactory.requestNextQuestion() {
-                self.currentQuestion = firstQuestion
-                let viewModel = self.convert(model: firstQuestion)
-                
-                self.show(quiz: viewModel)
-            }
-            */
         }
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
