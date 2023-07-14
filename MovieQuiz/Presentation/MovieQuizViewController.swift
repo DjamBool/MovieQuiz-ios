@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - свойства
     // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
     @IBOutlet private weak var noButton: UIButton!
@@ -16,7 +16,8 @@ final class MovieQuizViewController: UIViewController {
     
     // новые свойства, откуда брать вопросы
     private let questionsAmount: Int = 10  // общее количество вопросов для квиза
-    private let questionFactory: QuestionFactoryProtocol = QuestionFactory() // VC будет обращаться за вопросами
+    //private let questionFactory: QuestionFactoryProtocol = QuestionFactory() // VC будет обращаться за вопросами
+    private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion? // текущий вопрос, который видит пользователь
     
     // MARK: - Lifecycle
@@ -30,12 +31,28 @@ final class MovieQuizViewController: UIViewController {
         let viewModel = convert(model: firstQuestion)
         show(quiz: viewModel)
         */
-        if let firstQuestion = questionFactory.requestNextQuestion() {
+        questionFactory = QuestionFactory(delegate: self)
+       /* if let firstQuestion = questionFactory.requestNextQuestion() {
             currentQuestion = firstQuestion
             let viewModel = convert(model: firstQuestion)
             show(quiz: viewModel)
         }
+        */
+        questionFactory?.requestNextQuestion()
     }
+    
+    // MARK: - QuestionFactoryDelegate
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        guard let question = question else {
+            return
+        }
+        currentQuestion = question
+        let viewModel = convert(model: question)
+        DispatchQueue.main.async { [weak self] in
+               self?.show(quiz: viewModel)
+           }
+    }
+    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
     }
@@ -107,12 +124,15 @@ final class MovieQuizViewController: UIViewController {
         } else { // 2
             currentQuestionIndex += 1
             // идём в состояние "Вопрос показан"
+           /*
             if let nextQuestion = questionFactory.requestNextQuestion() {
                 currentQuestion = nextQuestion
             let viewModel = convert(model: nextQuestion)
             installBorder()
             show(quiz: viewModel)
             }
+            */
+            self.questionFactory?.requestNextQuestion()
         }
     }
     
@@ -132,13 +152,15 @@ final class MovieQuizViewController: UIViewController {
 //            let firstQuestion = self.questions[self.currentQuestionIndex]
 //            let viewModel = self.convert(model: firstQuestion)
 //            self.show(quiz: viewModel)
-            
+            self.questionFactory?.requestNextQuestion()
+           /*
             if let firstQuestion = self.questionFactory.requestNextQuestion() {
                 self.currentQuestion = firstQuestion
                 let viewModel = self.convert(model: firstQuestion)
                 
                 self.show(quiz: viewModel)
             }
+            */
         }
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
