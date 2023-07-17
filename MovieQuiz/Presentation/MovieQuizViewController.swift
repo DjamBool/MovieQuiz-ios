@@ -1,6 +1,8 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+    
+    
     // MARK: - свойства
     // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
     @IBOutlet private weak var noButton: UIButton!
@@ -20,6 +22,12 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion? // текущий вопрос, который видит пользователь
     
+    private var presenter = AlertPresenter()
+    //    private let result = AlertModel(title: "Wow", message: "message", buttonText: "Fix") {
+    //        print("yes")
+    //    }
+    
+    
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,6 +35,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         installBorder()
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
+        
+        presenter.viewController = self
     }
     
     // MARK: - QuestionFactoryDelegate
@@ -37,8 +47,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         currentQuestion = question
         let viewModel = convert(model: question)
         DispatchQueue.main.async { [weak self] in
-               self?.show(quiz: viewModel)
-           }
+            self?.show(quiz: viewModel)
+        }
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -46,7 +56,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     }
     // MARK: - методы
     @IBAction private func noButtonClicked(_ sender: Any) {
-       // let currentQuestion = questions[currentQuestionIndex]
+        // let currentQuestion = questions[currentQuestionIndex]
         guard let currentQuestion = currentQuestion else { return }
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
@@ -83,7 +93,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
         noButton.isEnabled = false
         yesButton.isEnabled = false
-       
+        
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         //[weak self] слабая ссылка на self
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
@@ -99,38 +109,24 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1  {
-           // let text = "Ваш результат: \(correctAnswers)/10"
             let text = correctAnswers == questionsAmount ?
-                      "Поздравляем, Вы ответили на 10 из 10!" :
-                      "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            show(quiz: viewModel)
+            "Поздравляем, Вы ответили на 10 из 10!" :
+            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+            let viewModel = AlertModel(title: "Этот раунд окончен!",
+                                       message: text,
+                                       buttonText: "Сыграть ещё раз",
+                                       completion: nil)
+            // метод из AlertPresenter
+            presenter.showAlert(result: viewModel)
+            currentQuestionIndex = 0
+            correctAnswers = 0
+            questionFactory?.requestNextQuestion()
+            
             installBorder()
-        } else { // 2
+        } else {
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
         }
-    }
-    
-    // приватный метод для показа результатов раунда квиза
-    // принимает вью модель QuizResultsViewModel и ничего не возвращает
-    private func show(quiz result: QuizResultsViewModel) {
-        let alert = UIAlertController(title: result.title,
-                                      message: result.text,
-                                      preferredStyle: .alert)
-        //  слабая ссылка на self в замыкании, чтобы убрать Retain Cycles.
-        let action = UIAlertAction(title: result.buttonText, style: .default) { [weak self] _ in
-            guard let self = self else { return } // разворачиваем слабую ссылку
-            
-            self.currentQuestionIndex = 0
-            self.correctAnswers = 0
-            self.questionFactory?.requestNextQuestion()
-        }
-        alert.addAction(action)
-        self.present(alert, animated: true, completion: nil)
     }
     
     private func installFont() {
