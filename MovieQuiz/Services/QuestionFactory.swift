@@ -7,10 +7,10 @@
 
 import Foundation
 
-class QuestionFactory: QuestionFactoryProtocol {
+final class QuestionFactory: QuestionFactoryProtocol {
     
-    weak var delegate: QuestionFactoryDelegate?
-    init(delegate: QuestionFactoryDelegate) {
+    private weak var delegate: QuestionFactoryDelegate? // weak чтобы избежать retain cycle
+    init(delegate: QuestionFactoryDelegate?) {
         self.delegate = delegate
     }
     
@@ -57,12 +57,21 @@ class QuestionFactory: QuestionFactoryProtocol {
     ]
     
     func requestNextQuestion() {
-        guard let index = (0..<questions.count).randomElement() else {
-            delegate?.didReceiveNextQuestion(question: nil)
+        //  вариант из учебника
+//        guard let index = (0..<questions.count).randomElement() else {
+//            delegate?.didReceiveNextQuestion(question: nil)
+//            return
+//        }
+//
+//        let question = questions[safe: index]
+//        delegate?.didReceiveNextQuestion(question: question)
+        
+        // вариант из разбора
+        guard let question = questions.randomElement() else {
+            assertionFailure("question is empty")
             return
         }
-        
-        let question = questions[safe: index]
+        // сообщить контроллеру, что мы достали именно этот вопрос - паттерн Delegate => у QuestionFactory будет сущ зависимость на другой класс через протокол QuestionFactoryDelegate
         delegate?.didReceiveNextQuestion(question: question)
     }
 }

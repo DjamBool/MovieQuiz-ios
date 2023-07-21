@@ -1,13 +1,12 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
+final class MovieQuizViewController: UIViewController {
     
     
     // MARK: - свойства
     // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
-    
     @IBOutlet private weak var questionTitleLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var textLabel: UILabel!
@@ -16,17 +15,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
-    // новые свойства, откуда брать вопросы
+    // откуда брать вопросы
     private let questionsAmount: Int = 10  // общее количество вопросов для квиза
-    //private let questionFactory: QuestionFactoryProtocol = QuestionFactory() // VC будет обращаться за вопросами
     private var questionFactory: QuestionFactoryProtocol?
     private var currentQuestion: QuizQuestion? // текущий вопрос, который видит пользователь
     
-    private var presenter = AlertPresenter()
-    //    private let result = AlertModel(title: "Wow", message: "message", buttonText: "Fix") {
-    //        print("yes")
-    //    }
-    
+    private var alertPresenter: AlertPresenterProtocol?
+    private var statisticService: StatisticService?
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -35,20 +30,8 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         installBorder()
         questionFactory = QuestionFactory(delegate: self)
         questionFactory?.requestNextQuestion()
-        
-        presenter.viewController = self
-    }
-    
-    // MARK: - QuestionFactoryDelegate
-    func didReceiveNextQuestion(question: QuizQuestion?) {
-        guard let question = question else {
-            return
-        }
-        currentQuestion = question
-        let viewModel = convert(model: question)
-        DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
-        }
+        alertPresenter = AlertPresenter(viewController: self)
+        statisticService = StatisticServiceImplementation()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -66,7 +49,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
-    
+
     // приватный метод конвертации. принимает моковый вопрос и возвращает вью модель для главного экрана
     private func convert(model: QuizQuestion) -> QuizStepViewModel  {
         let quizStepViewModel = QuizStepViewModel(
@@ -109,24 +92,43 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     
     private func showNextQuestionOrResults() {
         if currentQuestionIndex == questionsAmount - 1  {
-            let text = correctAnswers == questionsAmount ?
-            "Поздравляем, Вы ответили на 10 из 10!" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
-            let viewModel = AlertModel(title: "Этот раунд окончен!",
-                                       message: text,
-                                       buttonText: "Сыграть ещё раз",
-                                       completion: nil)
-            // метод из AlertPresenter
-            presenter.showAlert(result: viewModel)
-            currentQuestionIndex = 0
-            correctAnswers = 0
-            questionFactory?.requestNextQuestion()
-            
+            showResults()
             installBorder()
         } else {
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
         }
+    }
+    
+    private func showResults() {
+        statisticService?.store(correct: correctAnswers, total: questionsAmount)
+        let alertModel = AlertModel(title: "Этот раунд окончен!",
+                                    message: makeResultMessage(),
+                                    buttonText: "Сыграть ещё раз") { [weak self] in
+            guard let self = self else { return }
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            self.questionFactory?.requestNextQuestion()
+        }
+        alertPresenter?.show(alertModel: alertModel)
+    }
+    
+    private func makeResultMessage() -> String {
+        guard let statisticService = statisticService,
+              let bestGame = statisticService.bestGame
+        else {
+            print("Результат неизвестен")
+            return ""
+        }
+        let currentCorrectAnswers = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
+        let numberOfTestsPlayed = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+        let bestResult = "Рекорд: \(bestGame.correct)/\(bestGame.total)" + " " + "\(bestGame.date.dateTimeString)"
+        let accuracy = String(format: "%.2f", statisticService.totalAccuracy)
+        let averageAccuracy = "Средняя точность: \(accuracy)%"
+        
+        let resultMessage = [currentCorrectAnswers, numberOfTestsPlayed, bestResult, averageAccuracy].joined(separator: "\n")
+        
+        return resultMessage
     }
     
     private func installFont() {
@@ -142,6 +144,14 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.layer.cornerRadius = 20
     }
     
+}
+
+extension MovieQuizViewController: QuestionFactoryDelegate {
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+        self.currentQuestion = question
+        let viewModel = self.convert(model: question!)
+        self.show(quiz: viewModel)
+    }
 }
 
 /*
