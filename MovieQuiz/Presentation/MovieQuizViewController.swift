@@ -15,10 +15,9 @@ final class MovieQuizViewController: UIViewController {
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
-    // откуда брать вопросы
-    private let questionsAmount: Int = 10  // общее количество вопросов для квиза
+    private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
-    private var currentQuestion: QuizQuestion? // текущий вопрос, который видит пользователь
+    private var currentQuestion: QuizQuestion?
     
     private var alertPresenter: AlertPresenterProtocol?
     private var statisticService: StatisticService?
@@ -39,7 +38,6 @@ final class MovieQuizViewController: UIViewController {
     }
     // MARK: - методы
     @IBAction private func noButtonClicked(_ sender: Any) {
-        // let currentQuestion = questions[currentQuestionIndex]
         guard let currentQuestion = currentQuestion else { return }
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
@@ -50,7 +48,6 @@ final class MovieQuizViewController: UIViewController {
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
 
-    // приватный метод конвертации. принимает моковый вопрос и возвращает вью модель для главного экрана
     private func convert(model: QuizQuestion) -> QuizStepViewModel  {
         let quizStepViewModel = QuizStepViewModel(
             image: UIImage(named: model.image) ?? UIImage(),
@@ -59,14 +56,12 @@ final class MovieQuizViewController: UIViewController {
         return quizStepViewModel
     }
     
-    // приватный метод вывода на экран вопроса. принимает на вход вью модель вопроса и ничего не возвращает
     private func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
-    // приватный метод, который меняет цвет рамки
-    // принимает на вход булевое значение и ничего не возвращает
+
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
@@ -80,9 +75,7 @@ final class MovieQuizViewController: UIViewController {
         // запускаем задачу через 1 секунду c помощью диспетчера задач
         //[weak self] слабая ссылка на self
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return } // разворачиваем слабую ссылку
-            
-            // код, который мы хотим вызвать через 1 секунду
+            guard let self = self else { return }             
             self.showNextQuestionOrResults()
             self.noButton.isEnabled = true
             self.yesButton.isEnabled = true
