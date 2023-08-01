@@ -40,7 +40,7 @@
                                             <constraint firstAttribute="height" constant="24" id="bQa-ii-K9w"/>
                                         </constraints>
                                     </stackView>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K4r-Va-CqB" userLabel="Preview Image">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="K4r-Va-CqB" userLabel="Preview Image">
                                         <rect key="frame" x="0.0" y="44" width="374" height="561"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="K4r-Va-CqB" secondAttribute="height" multiplier="2:3" id="Cvh-hC-Ty3"/>
@@ -106,17 +106,23 @@
                                     <constraint firstAttribute="trailing" secondItem="YSN-8I-Qqw" secondAttribute="trailing" id="oig-YK-bMM"/>
                                 </constraints>
                             </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="fYQ-Dq-gLN">
+                                <rect key="frame" x="197" y="438" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" name="YP Black "/>
                         <constraints>
                             <constraint firstItem="ovE-K4-bTs" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="10" id="Aq7-XX-QQj"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ovE-K4-bTs" secondAttribute="trailing" constant="20" id="EL9-yX-tW9"/>
+                            <constraint firstItem="fYQ-Dq-gLN" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="KdO-6M-eDe"/>
                             <constraint firstItem="ovE-K4-bTs" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="LIj-Dv-SLL"/>
+                            <constraint firstItem="fYQ-Dq-gLN" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="OS4-fu-weK"/>
                             <constraint firstItem="ovE-K4-bTs" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="cWM-JJ-a7k"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="fYQ-Dq-gLN" id="0ml-AV-lgI"/>
                         <outlet property="counterLabel" destination="dLH-64-80E" id="Vx5-vl-VhV"/>
                         <outlet property="imageView" destination="K4r-Va-CqB" id="DsP-Gd-b6v"/>
                         <outlet property="noButton" destination="L7i-qN-j6j" id="DYK-Cz-4kb"/>
