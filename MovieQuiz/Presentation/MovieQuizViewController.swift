@@ -145,7 +145,7 @@ final class MovieQuizViewController: UIViewController {
         activityIndicator.startAnimating()
     }
     
-    private func showNetworkIndicator(message: String) {
+    private func showNetworkError(message: String) {
         hideLoadingIndicator()
         let model = AlertModel(title: "Ошибка",
                                message: message,
@@ -167,6 +167,15 @@ final class MovieQuizViewController: UIViewController {
 }
 
 extension MovieQuizViewController: QuestionFactoryDelegate {
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
     func didReceiveNextQuestion(question: QuizQuestion?) {
         self.currentQuestion = question
         let viewModel = self.convert(model: question!)

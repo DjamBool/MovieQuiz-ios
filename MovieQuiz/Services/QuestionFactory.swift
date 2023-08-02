@@ -10,9 +10,14 @@ import Foundation
 final class QuestionFactory: QuestionFactoryProtocol {
     
     private weak var delegate: QuestionFactoryDelegate? // weak чтобы избежать retain cycle
-    init(delegate: QuestionFactoryDelegate?) {
+    private let moviesLoader: MoviesLoading // добавлен загрузчик фильмов
+    
+    init(moviesLoader: MoviesLoading, delegate: QuestionFactoryDelegate?) { // обновлен init
+        self.moviesLoader = moviesLoader
         self.delegate = delegate
     }
+    
+    
     
     private var questions: [QuizQuestion] = [
         QuizQuestion(image: "The Godfather",
@@ -57,16 +62,6 @@ final class QuestionFactory: QuestionFactoryProtocol {
     ]
     
     func requestNextQuestion() {
-        //  вариант из учебника
-//        guard let index = (0..<questions.count).randomElement() else {
-//            delegate?.didReceiveNextQuestion(question: nil)
-//            return
-//        }
-//
-//        let question = questions[safe: index]
-//        delegate?.didReceiveNextQuestion(question: question)
-        
-        // вариант из разбора
         guard let question = questions.randomElement() else {
             assertionFailure("question is empty")
             return
