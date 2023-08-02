@@ -14,7 +14,6 @@ final class MovieQuizViewController: UIViewController {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
@@ -33,7 +32,7 @@ final class MovieQuizViewController: UIViewController {
         
         showLoadingIndicator()
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
-      
+        
         alertPresenter = AlertPresenter(viewController: self)
         statisticService = StatisticServiceImplementation()
         
@@ -54,12 +53,12 @@ final class MovieQuizViewController: UIViewController {
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
-
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel  {
         return QuizStepViewModel(
-               image: UIImage(data: model.image) ?? UIImage(),
-               question: model.text,
-               questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
+            image: UIImage(data: model.image) ?? UIImage(),
+            question: model.text,
+            questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
     }
     
     private func show(quiz step: QuizStepViewModel) {
@@ -67,7 +66,7 @@ final class MovieQuizViewController: UIViewController {
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
-
+    
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
@@ -78,10 +77,8 @@ final class MovieQuizViewController: UIViewController {
         noButton.isEnabled = false
         yesButton.isEnabled = false
         
-        // запускаем задачу через 1 секунду c помощью диспетчера задач
-        //[weak self] слабая ссылка на self
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }             
+            guard let self = self else { return }
             self.showNextQuestionOrResults()
             self.noButton.isEnabled = true
             self.yesButton.isEnabled = true
@@ -159,7 +156,7 @@ final class MovieQuizViewController: UIViewController {
             self.correctAnswers = 0
             
             self.questionFactory?.requestNextQuestion()
-    }
+        }
         alertPresenter?.show(alertModel: model)
     }
     
@@ -168,6 +165,8 @@ final class MovieQuizViewController: UIViewController {
         activityIndicator.isHidden = true
     }
 }
+
+// MARK: - extension MovieQuizViewController: QuestionFactoryDelegate
 
 extension MovieQuizViewController: QuestionFactoryDelegate {
     func didLoadDataFromServer() {
@@ -188,7 +187,6 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
 
 /*
  Mock-данные
- 
  
  Картинка: The Godfather
  Настоящий рейтинг: 9,2

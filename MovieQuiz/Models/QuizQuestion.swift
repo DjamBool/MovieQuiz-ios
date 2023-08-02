@@ -6,8 +6,16 @@
 //
 
 import Foundation
+// структура вопроса при работе с сетью
+struct QuizQuestion {
+    let image: Data
+    let text: String
+    let correctAnswer: Bool
+}
 
-/* структура вопроса начало
+
+
+/* структура вопроса. начало
 struct QuizQuestion {
     // строка с названием фильма,совпадает с названием картинки афиши фильма в Assets
     let image: String
@@ -18,9 +26,3 @@ struct QuizQuestion {
 }
 */
     
-// структура вопроса при работе с сетью
-struct QuizQuestion {
-    let image: Data
-    let text: String
-    let correctAnswer: Bool
-}
