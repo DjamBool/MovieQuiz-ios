@@ -12,13 +12,14 @@ final class MovieQuizViewController: UIViewController {
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var imageView: UIImageView!
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    
     private var currentQuestionIndex = 0
     private var correctAnswers = 0
     
-    // откуда брать вопросы
-    private let questionsAmount: Int = 10  // общее количество вопросов для квиза
+    private let questionsAmount: Int = 10
     private var questionFactory: QuestionFactoryProtocol?
-    private var currentQuestion: QuizQuestion? // текущий вопрос, который видит пользователь
+    private var currentQuestion: QuizQuestion?
     
     private var alertPresenter: AlertPresenterProtocol?
     private var statisticService: StatisticService?
@@ -28,10 +29,14 @@ final class MovieQuizViewController: UIViewController {
         super.viewDidLoad()
         installFont()
         installBorder()
-        questionFactory = QuestionFactory(delegate: self)
-        questionFactory?.requestNextQuestion()
+        
+        showLoadingIndicator()
+        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+        
         alertPresenter = AlertPresenter(viewController: self)
         statisticService = StatisticServiceImplementation()
+        
+        questionFactory?.loadData()
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -39,7 +44,6 @@ final class MovieQuizViewController: UIViewController {
     }
     // MARK: - методы
     @IBAction private func noButtonClicked(_ sender: Any) {
-        // let currentQuestion = questions[currentQuestionIndex]
         guard let currentQuestion = currentQuestion else { return }
         let givenAnswer = false
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
@@ -49,24 +53,20 @@ final class MovieQuizViewController: UIViewController {
         let givenAnswer = true
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
-
-    // приватный метод конвертации. принимает моковый вопрос и возвращает вью модель для главного экрана
+    
     private func convert(model: QuizQuestion) -> QuizStepViewModel  {
-        let quizStepViewModel = QuizStepViewModel(
-            image: UIImage(named: model.image) ?? UIImage(),
+        return QuizStepViewModel(
+            image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return quizStepViewModel
     }
     
-    // приватный метод вывода на экран вопроса. принимает на вход вью модель вопроса и ничего не возвращает
     private func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
-    // приватный метод, который меняет цвет рамки
-    // принимает на вход булевое значение и ничего не возвращает
+    
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
             correctAnswers += 1
@@ -77,12 +77,8 @@ final class MovieQuizViewController: UIViewController {
         noButton.isEnabled = false
         yesButton.isEnabled = false
         
-        // запускаем задачу через 1 секунду c помощью диспетчера задач
-        //[weak self] слабая ссылка на self
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return } // разворачиваем слабую ссылку
-            
-            // код, который мы хотим вызвать через 1 секунду
+            guard let self = self else { return }
             self.showNextQuestionOrResults()
             self.noButton.isEnabled = true
             self.yesButton.isEnabled = true
@@ -144,9 +140,44 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.cornerRadius = 20
     }
     
+    private func showLoadingIndicator() {
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+    }
+    
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator()
+        let model = AlertModel(title: "Ошибка",
+                               message: message,
+                               buttonText: "Попробовать еще раз") { [weak self] in
+            guard let self = self else { return }
+            
+            self.currentQuestionIndex = 0
+            self.correctAnswers = 0
+            
+            self.questionFactory?.requestNextQuestion()
+        }
+        alertPresenter?.show(alertModel: model)
+    }
+    
+    private func hideLoadingIndicator() {
+        activityIndicator.stopAnimating()
+        activityIndicator.isHidden = true
+    }
 }
 
+// MARK: - extension MovieQuizViewController: QuestionFactoryDelegate
+
 extension MovieQuizViewController: QuestionFactoryDelegate {
+    func didLoadDataFromServer() {
+        activityIndicator.isHidden = true
+        questionFactory?.requestNextQuestion()
+    }
+    
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+    
     func didReceiveNextQuestion(question: QuizQuestion?) {
         self.currentQuestion = question
         let viewModel = self.convert(model: question!)
@@ -156,7 +187,6 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
 
 /*
  Mock-данные
- 
  
  Картинка: The Godfather
  Настоящий рейтинг: 9,2
