@@ -20,7 +20,7 @@ final class MovieQuizViewController: UIViewController {
     
     
     private var alertPresenter: AlertPresenterProtocol?
-    private var statisticService: StatisticService?
+    //private var statisticService: StatisticService? // шаг 2.8
     
     // Рефакторинг
     // private let presenter = MovieQuizPresenter() //  Шаг 4, шаг 2.7
@@ -36,7 +36,7 @@ final class MovieQuizViewController: UIViewController {
        // questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self) // шаг 2.7
         
         alertPresenter = AlertPresenter(viewController: self)
-        statisticService = StatisticServiceImplementation()
+        // statisticService = StatisticServiceImplementation() // шаг 2.8
         
         //questionFactory?.loadData() // шаг 2.7
         
@@ -102,9 +102,10 @@ final class MovieQuizViewController: UIViewController {
     }
     
   func showResults(quiz result: QuizResultsViewModel) { // шаг 2.6
-      statisticService?.store(correct: presenter.correctAnswers, total: presenter.questionsAmount)
+//      statisticService?.store(correct: presenter.correctAnswers, total: presenter.questionsAmount) // шаг 2.8
+      let message = presenter.makeResultMessage()
         let alertModel = AlertModel(title: "Этот раунд окончен!",
-                                    message: makeResultMessage(),
+                                    message: message, // шаг 2.8
                                     buttonText: "Сыграть ещё раз") { [weak self] in
             guard let self = self else { return }
             self.presenter.resetQuestionIndex() //Шаг 1.5
@@ -114,7 +115,8 @@ final class MovieQuizViewController: UIViewController {
         }
         alertPresenter?.show(alertModel: alertModel)
     }
-    
+    /*
+     // шаг 2.8
     private func makeResultMessage() -> String {
         guard let statisticService = statisticService,
               let bestGame = statisticService.bestGame
@@ -132,7 +134,7 @@ final class MovieQuizViewController: UIViewController {
         
         return resultMessage
     }
-    
+   */
     private func installFont() {
         noButton.titleLabel?.font = UIFont.init(name: "YSDisplay-Medium", size: 20)
         yesButton.titleLabel?.font = UIFont.init(name: "YSDisplay-Medium", size: 20)

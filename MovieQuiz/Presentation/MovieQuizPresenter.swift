@@ -20,9 +20,14 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     var correctAnswers: Int = 0 // шаг 2.5
     var questionFactory: QuestionFactoryProtocol? // шаг 2.5
     
+     // Шаг 2.8
+    private let statisticService: StatisticService!
+    
     // шаг 2.7
     init(viewController: MovieQuizViewController) {
         self.viewController = viewController
+        
+        statisticService = StatisticServiceImplementation()   // Шаг 2.8
         
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
@@ -106,6 +111,29 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             self.switchToNextQuestion()
             questionFactory?.requestNextQuestion()
         }
+    }
+    
+    // Шаг 2.8
+     func makeResultMessage() -> String {
+        guard let statisticService = statisticService,
+              let bestGame = statisticService.bestGame
+        else {
+            print("Результат неизвестен")
+            return ""
+        }
+         statisticService.store(correct: correctAnswers, total: questionsAmount)
+         
+//         let bestGame = statisticService.bestGame
+         
+        let currentCorrectAnswers = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
+        let numberOfTestsPlayed = "Количество сыгранных квизов: \(statisticService.gamesCount)"
+        let bestResult = "Рекорд: \(bestGame.correct)/\(bestGame.total)" + " " + "\(bestGame.date.dateTimeString)"
+        let accuracy = String(format: "%.2f", statisticService.totalAccuracy)
+        let averageAccuracy = "Средняя точность: \(accuracy)%"
+        
+        let resultMessage = [currentCorrectAnswers, numberOfTestsPlayed, bestResult, averageAccuracy].joined(separator: "\n")
+        
+        return resultMessage
     }
 }
 
