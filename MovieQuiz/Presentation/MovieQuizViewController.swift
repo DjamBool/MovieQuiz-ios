@@ -16,15 +16,15 @@ final class MovieQuizViewController: UIViewController {
     
     // private var correctAnswers = 0 // шаг 2.6
     
-    private var questionFactory: QuestionFactoryProtocol?
+    // private var questionFactory: QuestionFactoryProtocol? // шаг 2.7
     
     
     private var alertPresenter: AlertPresenterProtocol?
     private var statisticService: StatisticService?
     
     // Рефакторинг
-    private let presenter = MovieQuizPresenter() //  Шаг 4
-    
+    // private let presenter = MovieQuizPresenter() //  Шаг 4, шаг 2.7
+    private var presenter: MovieQuizPresenter! // шаг 2.7
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -33,14 +33,16 @@ final class MovieQuizViewController: UIViewController {
         installBorder()
         
         showLoadingIndicator()
-        questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
+       // questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self) // шаг 2.7
         
         alertPresenter = AlertPresenter(viewController: self)
         statisticService = StatisticServiceImplementation()
         
-        questionFactory?.loadData()
+        //questionFactory?.loadData() // шаг 2.7
         
-        presenter.viewController = self // шаг 2.1
+        presenter = MovieQuizPresenter(viewController: self)
+       // presenter.viewController = self // шаг 2.1 //шаг 2.7
+        
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -74,7 +76,7 @@ final class MovieQuizViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             //self.presenter.correctAnswers = self.correctAnswers
-            self.presenter.questionFactory = self.questionFactory
+           // self.presenter.questionFactory = self.questionFactory // шаг 2.7
             self.presenter.showNextQuestionOrResults()
             self.noButton.isEnabled = true
             self.yesButton.isEnabled = true
@@ -94,7 +96,8 @@ final class MovieQuizViewController: UIViewController {
             installBorder()
         } else {
             presenter.switchToNextQuestion()    // Шаг 1.5
-            self.questionFactory?.requestNextQuestion()
+           // self.presenter.restartGame()  // шаг 2.7
+        //    self.questionFactory?.requestNextQuestion() // шаг 2.7
         }
     }
     
@@ -106,7 +109,8 @@ final class MovieQuizViewController: UIViewController {
             guard let self = self else { return }
             self.presenter.resetQuestionIndex() //Шаг 1.5
             self.presenter.correctAnswers = 0 // шаг 2.6
-            self.questionFactory?.requestNextQuestion()
+            self.presenter.restartGame()  // шаг 2.7
+          //  self.questionFactory?.requestNextQuestion() // шаг 2.7
         }
         alertPresenter?.show(alertModel: alertModel)
     }
@@ -142,27 +146,28 @@ final class MovieQuizViewController: UIViewController {
         imageView.layer.cornerRadius = 20
     }
     
-    private func showLoadingIndicator() {
+     func showLoadingIndicator() {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
     }
     
-    private func showNetworkError(message: String) {
+     func showNetworkError(message: String) {
         hideLoadingIndicator()
         let model = AlertModel(title: "Ошибка",
                                message: message,
                                buttonText: "Попробовать еще раз") { [weak self] in
             guard let self = self else { return }
             
-            self.presenter.resetQuestionIndex() // //Шаг 5
+            self.presenter.resetQuestionIndex() // //Шаг 1.5
             self.presenter.correctAnswers = 0
             
-            self.questionFactory?.requestNextQuestion()
+            // self.questionFactory?.requestNextQuestion() // шаг 2.7
+            self.presenter.restartGame()
         }
         alertPresenter?.show(alertModel: model)
     }
     
-    private func hideLoadingIndicator() {
+     func hideLoadingIndicator() {
         activityIndicator.stopAnimating()
         activityIndicator.isHidden = true
     }
@@ -170,6 +175,8 @@ final class MovieQuizViewController: UIViewController {
 
 // MARK: - extension MovieQuizViewController: QuestionFactoryDelegate
 
+// шаг 2.7
+/*
 extension MovieQuizViewController: QuestionFactoryDelegate {
     func didLoadDataFromServer() {
         activityIndicator.isHidden = true
@@ -185,7 +192,7 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
         presenter.didReceiveNextQuestion(question: question)
     }
 }
-
+*/
 
 /*
  Mock-данные
