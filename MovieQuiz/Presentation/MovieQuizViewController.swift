@@ -14,7 +14,7 @@ final class MovieQuizViewController: UIViewController {
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
-    private var correctAnswers = 0
+    // private var correctAnswers = 0 // шаг 2.6
     
     private var questionFactory: QuestionFactoryProtocol?
     
@@ -23,7 +23,7 @@ final class MovieQuizViewController: UIViewController {
     private var statisticService: StatisticService?
     
     // Рефакторинг
-    private let presenter = MovieQuizPresenter()
+    private let presenter = MovieQuizPresenter() //  Шаг 4
     
     
     // MARK: - Lifecycle
@@ -40,7 +40,7 @@ final class MovieQuizViewController: UIViewController {
         
         questionFactory?.loadData()
         
-        presenter.viewController = self
+        presenter.viewController = self // шаг 2.1
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
@@ -48,22 +48,22 @@ final class MovieQuizViewController: UIViewController {
     }
     // MARK: - методы
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked()
+        presenter.noButtonClicked() // шаг 2.4
     }
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked()
+        presenter.yesButtonClicked() // шаг 2.4
     }
     
-    func show(quiz step: QuizStepViewModel) {
+    func show(quiz step: QuizStepViewModel) { // Шаг 2.4 - убрать private
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
 
-    func showAnswerResult(isCorrect: Bool) {
+    func showAnswerResult(isCorrect: Bool) { // шаг 2.5
         if isCorrect {
-            correctAnswers += 1
+            presenter.correctAnswers += 1
         }
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
@@ -73,7 +73,7 @@ final class MovieQuizViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            self.presenter.correctAnswers = self.correctAnswers
+            //self.presenter.correctAnswers = self.correctAnswers
             self.presenter.questionFactory = self.questionFactory
             self.presenter.showNextQuestionOrResults()
             self.noButton.isEnabled = true
@@ -83,8 +83,8 @@ final class MovieQuizViewController: UIViewController {
     }
     
     private func showNextQuestionOrResults() {
-        if presenter.isLastQuestion() { // changed
-            let text = "Вы ответили на \(correctAnswers) из 10, попробуйте еще раз!"
+        if presenter.isLastQuestion() { // Шаг 5 changed
+            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
 
             let viewModel = QuizResultsViewModel(
                 title: "Этот раунд окончен!",
@@ -93,19 +93,19 @@ final class MovieQuizViewController: UIViewController {
             showResults(quiz: viewModel)
             installBorder()
         } else {
-            presenter.switchToNextQuestion()    // changed
+            presenter.switchToNextQuestion()    // Шаг 1.5
             self.questionFactory?.requestNextQuestion()
         }
     }
     
-  func showResults(quiz result: QuizResultsViewModel) {
-        statisticService?.store(correct: correctAnswers, total: presenter.questionsAmount)
+  func showResults(quiz result: QuizResultsViewModel) { // шаг 2.6
+      statisticService?.store(correct: presenter.correctAnswers, total: presenter.questionsAmount)
         let alertModel = AlertModel(title: "Этот раунд окончен!",
                                     message: makeResultMessage(),
                                     buttonText: "Сыграть ещё раз") { [weak self] in
             guard let self = self else { return }
-            self.presenter.resetQuestionIndex()
-            self.correctAnswers = 0
+            self.presenter.resetQuestionIndex() //Шаг 1.5
+            self.presenter.correctAnswers = 0 // шаг 2.6
             self.questionFactory?.requestNextQuestion()
         }
         alertPresenter?.show(alertModel: alertModel)
@@ -118,7 +118,7 @@ final class MovieQuizViewController: UIViewController {
             print("Результат неизвестен")
             return ""
         }
-        let currentCorrectAnswers = "Ваш результат: \(correctAnswers)/\(presenter.questionsAmount)"
+        let currentCorrectAnswers = "Ваш результат: \(presenter.correctAnswers)/\(presenter.questionsAmount)"
         let numberOfTestsPlayed = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let bestResult = "Рекорд: \(bestGame.correct)/\(bestGame.total)" + " " + "\(bestGame.date.dateTimeString)"
         let accuracy = String(format: "%.2f", statisticService.totalAccuracy)
@@ -154,8 +154,8 @@ final class MovieQuizViewController: UIViewController {
                                buttonText: "Попробовать еще раз") { [weak self] in
             guard let self = self else { return }
             
-            self.presenter.resetQuestionIndex() // changed
-            self.correctAnswers = 0
+            self.presenter.resetQuestionIndex() // //Шаг 5
+            self.presenter.correctAnswers = 0
             
             self.questionFactory?.requestNextQuestion()
         }
@@ -180,7 +180,8 @@ extension MovieQuizViewController: QuestionFactoryDelegate {
         showNetworkError(message: error.localizedDescription)
     }
     
-    func didReceiveNextQuestion(question: QuizQuestion?) {
+    func didReceiveNextQuestion(question: QuizQuestion?) { // Шаг 2.4  - перенос в презентер
+        // let viewModel = presenter.convert(model: question) // Шаг 4
         presenter.didReceiveNextQuestion(question: question)
     }
 }

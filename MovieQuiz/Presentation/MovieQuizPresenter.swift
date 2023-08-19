@@ -10,28 +10,30 @@ import UIKit
 
 final class MovieQuizPresenter {
     // MARK: - свойства
-    let questionsAmount: Int = 10
-    var currentQuestion: QuizQuestion?
-    weak var viewController: MovieQuizViewController?
-    var currentQuestionIndex: Int = 0
+    let questionsAmount: Int = 10 // шаг 1.3
+    private var currentQuestionIndex: Int = 0 // шаг 1.3
     
-    var correctAnswers: Int = 0
-    var questionFactory: QuestionFactoryProtocol?
+    var currentQuestion: QuizQuestion? // шаг 2.1
+    weak var viewController: MovieQuizViewController? // шаг 2.1
+   
+    
+    var correctAnswers: Int = 0 // шаг 2.5
+    var questionFactory: QuestionFactoryProtocol? // шаг 2.5
 
     // MARK: - методы
-    func isLastQuestion() -> Bool {
+    func isLastQuestion() -> Bool { //Шаг 1.5
         currentQuestionIndex == questionsAmount - 1
     }
     
-    func resetQuestionIndex() {
+    func resetQuestionIndex() { //Шаг 1.5
         currentQuestionIndex = 0
     }
     
-    func switchToNextQuestion() {
+    func switchToNextQuestion() { //Шаг 1.5
         currentQuestionIndex += 1
     }
     
-    func convert(model: QuizQuestion) -> QuizStepViewModel  {
+    func convert(model: QuizQuestion) -> QuizStepViewModel  { // шаг 2
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
@@ -39,22 +41,30 @@ final class MovieQuizPresenter {
     }
     
     // MARK: - кнопки и DRY для повторяющегося кода
-    func yesButtonClicked() {
+    func yesButtonClicked() { // шаг 2.1
+//        guard let currentQuestion = currentQuestion else {
+//                    return
+//                }
+//                
+//                let givenAnswer = true
+//                
+//                viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+//            }
         didAnswer(isYes: true)
     }
     
-    func noButtonClicked() {
+    func noButtonClicked() { // шаг 2.2
         didAnswer(isYes: false)
     }
     
-    private func didAnswer(isYes: Bool) {
+    private func didAnswer(isYes: Bool) { // Шаг 2.3
         guard let currentQuestion = currentQuestion else { return }
         let givenAnswer = isYes
         viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
     // MARK: - didReceiveNextQuestion
-    func didReceiveNextQuestion(question: QuizQuestion?) {
+    func didReceiveNextQuestion(question: QuizQuestion?) { // Шаг 2.4
         guard let question = question else { return }
         currentQuestion = question
         let viewModel = convert(model: question)
@@ -64,7 +74,7 @@ final class MovieQuizPresenter {
     }
     
     // MARK: - showNextQuestionOrResults
-    func showNextQuestionOrResults() {
+    func showNextQuestionOrResults() { // шаг 2.5
           if self.isLastQuestion() {
               let text = "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
               
