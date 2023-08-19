@@ -5,12 +5,12 @@ final class MovieQuizViewController: UIViewController {
     
     // MARK: - свойства
     // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
-    @IBOutlet private weak var noButton: UIButton!
-    @IBOutlet private weak var yesButton: UIButton!
+    @IBOutlet  weak var noButton: UIButton!
+    @IBOutlet  weak var yesButton: UIButton!
     @IBOutlet private weak var questionTitleLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var textLabel: UILabel!
-    @IBOutlet private weak var imageView: UIImageView!
+    @IBOutlet  weak var imageView: UIImageView!
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
@@ -63,44 +63,50 @@ final class MovieQuizViewController: UIViewController {
         counterLabel.text = step.questionNumber
     }
 
-    func showAnswerResult(isCorrect: Bool) { // шаг 2.5
-        if isCorrect {
-            presenter.correctAnswers += 1
-        }
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8
-        imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        noButton.isEnabled = false
-        yesButton.isEnabled = false
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
-            //self.presenter.correctAnswers = self.correctAnswers
-           // self.presenter.questionFactory = self.questionFactory // шаг 2.7
-            self.presenter.showNextQuestionOrResults()
-            self.noButton.isEnabled = true
-            self.yesButton.isEnabled = true
-            self.imageView.layer.borderWidth = 0
-        }
-    }
-    
-    private func showNextQuestionOrResults() {
-        if presenter.isLastQuestion() { // Шаг 5 changed
-            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
-
-            let viewModel = QuizResultsViewModel(
-                title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            showResults(quiz: viewModel)
-            installBorder()
-        } else {
-            presenter.switchToNextQuestion()    // Шаг 1.5
-           // self.presenter.restartGame()  // шаг 2.7
-        //    self.questionFactory?.requestNextQuestion() // шаг 2.7
-        }
-    }
-    
+    // шаг 2.9
+    func highlightImageBorder(isCorrectAnswer: Bool) {
+          imageView.layer.masksToBounds = true
+          imageView.layer.borderWidth = 8
+          imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+      }
+//    func showAnswerResult(isCorrect: Bool) { // шаг 2.5
+//        if isCorrect {
+//            presenter.correctAnswers += 1
+//        }
+//        imageView.layer.masksToBounds = true
+//        imageView.layer.borderWidth = 8
+//        imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+//        noButton.isEnabled = false
+//        yesButton.isEnabled = false
+//
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+//            guard let self = self else { return }
+//            //self.presenter.correctAnswers = self.correctAnswers
+//           // self.presenter.questionFactory = self.questionFactory // шаг 2.7
+//            self.presenter.showNextQuestionOrResults()
+//            self.noButton.isEnabled = true
+//            self.yesButton.isEnabled = true
+//            self.imageView.layer.borderWidth = 0
+//        }
+//    }
+    // ШАГ 2.9
+//    private func showNextQuestionOrResults() {
+//        if presenter.isLastQuestion() { // Шаг 5 changed
+//            let text = "Вы ответили на \(presenter.correctAnswers) из 10, попробуйте еще раз!"
+//
+//            let viewModel = QuizResultsViewModel(
+//                title: "Этот раунд окончен!",
+//                text: text,
+//                buttonText: "Сыграть ещё раз")
+//            showResults(quiz: viewModel)
+//            installBorder()
+//        } else {
+//            presenter.switchToNextQuestion()    // Шаг 1.5
+//           // self.presenter.restartGame()  // шаг 2.7
+//        //    self.questionFactory?.requestNextQuestion() // шаг 2.7
+//        }
+//    }
+//
   func showResults(quiz result: QuizResultsViewModel) { // шаг 2.6
 //      statisticService?.store(correct: presenter.correctAnswers, total: presenter.questionsAmount) // шаг 2.8
       let message = presenter.makeResultMessage()

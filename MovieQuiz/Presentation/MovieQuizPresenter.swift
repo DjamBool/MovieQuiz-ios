@@ -94,7 +94,8 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private func didAnswer(isYes: Bool) { // Шаг 2.3
         guard let currentQuestion = currentQuestion else { return }
         let givenAnswer = isYes
-        viewController?.showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+        
+        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
     }
     
     // MARK: - showNextQuestionOrResults
@@ -135,5 +136,26 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         
         return resultMessage
     }
+    // шаг 2.9
+    func showAnswerResult(isCorrect: Bool) {
+        didAnswer(isCorrectAnswer: isCorrect)
+        viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self = self else { return }
+            //self.presenter.correctAnswers = self.correctAnswers
+           // self.presenter.questionFactory = self.questionFactory // шаг 2.7
+            self.showNextQuestionOrResults()
+            self.viewController?.noButton.isEnabled = true
+            self.viewController?.yesButton.isEnabled = true
+            self.viewController?.imageView.layer.borderWidth = 0
+        }
+    }
+    
+    func didAnswer(isCorrectAnswer: Bool) {
+          if isCorrectAnswer {
+              correctAnswers += 1
+          }
+      }
 }
 
