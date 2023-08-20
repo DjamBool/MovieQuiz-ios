@@ -1,33 +1,25 @@
-//
-//  MovieQuizPresenter.swift
-//  MovieQuiz
-//
-//  Created by Игорь Мунгалов on 16.08.2023.
-//
+
 
 import Foundation
 import UIKit
 
 final class MovieQuizPresenter: QuestionFactoryDelegate {
     // MARK: - свойства
-    let questionsAmount: Int = 10 // шаг 1.3
-    private var currentQuestionIndex: Int = 0 // шаг 1.3
+    let questionsAmount: Int = 10
+    private var currentQuestionIndex: Int = 0
     
-    var currentQuestion: QuizQuestion? // шаг 2.1
-    private weak var viewController: MovieQuizViewControllerProtocol? // шаг 2.1
+    var currentQuestion: QuizQuestion?
+    private weak var viewController: MovieQuizViewControllerProtocol?
+
+    var correctAnswers: Int = 0
+    var questionFactory: QuestionFactoryProtocol?
     
-    
-    var correctAnswers: Int = 0 // шаг 2.5
-    var questionFactory: QuestionFactoryProtocol? // шаг 2.5
-    
-    // Шаг 2.8
     private let statisticService: StatisticService!
     
-    // шаг 2.7
     init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
         
-        statisticService = StatisticServiceImplementation()   // Шаг 2.8
+        statisticService = StatisticServiceImplementation()
         
         questionFactory = QuestionFactory(moviesLoader: MoviesLoader(), delegate: self)
         questionFactory?.loadData()
@@ -63,19 +55,19 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     // MARK: - методы
-    func isLastQuestion() -> Bool { //Шаг 1.5
+    func isLastQuestion() -> Bool {
         currentQuestionIndex == questionsAmount - 1
     }
     
-    func resetQuestionIndex() { //Шаг 1.5
+    func resetQuestionIndex() {
         currentQuestionIndex = 0
     }
     
-    func switchToNextQuestion() { //Шаг 1.5
+    func switchToNextQuestion() {
         currentQuestionIndex += 1
     }
     
-    func convert(model: QuizQuestion) -> QuizStepViewModel  { // шаг 2
+    func convert(model: QuizQuestion) -> QuizStepViewModel  {
         return QuizStepViewModel(
             image: UIImage(data: model.image) ?? UIImage(),
             question: model.text,
@@ -83,15 +75,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     // MARK: - кнопки и DRY для повторяющегося кода
-    func yesButtonClicked() { // шаг 2.1
+    func yesButtonClicked() {
         didAnswer(isYes: true)
     }
     
-    func noButtonClicked() { // шаг 2.2
+    func noButtonClicked() {
         didAnswer(isYes: false)
     }
     
-    private func didAnswer(isYes: Bool) { // Шаг 2.3
+    private func didAnswer(isYes: Bool) {
         guard let currentQuestion = currentQuestion else { return }
         let givenAnswer = isYes
         
@@ -99,7 +91,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     // MARK: - showNextQuestionOrResults
-    func showNextQuestionOrResults() { // шаг 2.5
+    func showNextQuestionOrResults() {
         if self.isLastQuestion() {
             let text = "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
             
@@ -113,8 +105,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             questionFactory?.requestNextQuestion()
         }
     }
-    
-    // Шаг 2.8
+ 
     func makeResultMessage() -> String {
         guard let statisticService = statisticService,
               let bestGame = statisticService.bestGame
@@ -123,9 +114,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
             return ""
         }
         statisticService.store(correct: correctAnswers, total: questionsAmount)
-        
-        //         let bestGame = statisticService.bestGame
-        
+      
         let currentCorrectAnswers = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
         let numberOfTestsPlayed = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let bestResult = "Рекорд: \(bestGame.correct)/\(bestGame.total)" + " " + "\(bestGame.date.dateTimeString)"
@@ -136,18 +125,15 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         
         return resultMessage
     }
-    // шаг 2.9
+   
     func showAnswerResult(isCorrect: Bool) {
         didAnswer(isCorrectAnswer: isCorrect)
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
         viewController?.lockButtons()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-           
             self.showNextQuestionOrResults()
             self.viewController?.unlockButtons()
-            
-           // self.viewController?.imageView.layer.borderWidth = 0
         }
     }
     

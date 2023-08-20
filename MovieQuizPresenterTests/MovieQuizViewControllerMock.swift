@@ -12,28 +12,36 @@ import XCTest
 
 final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
     
-func show(quiz step: QuizStepViewModel) {
-
-}
-
-func showResults(quiz result: QuizResultsViewModel) {
+    func lockButtons() {
+        
+    }
     
-}
-
-func highlightImageBorder(isCorrectAnswer: Bool) {
+    func unlockButtons() {
+        
+    }
     
-}
-
-func showLoadingIndicator() {
+    func show(quiz step: QuizStepViewModel) {
+        
+    }
     
-}
-
-func hideLoadingIndicator() {
+    func showResults(quiz result: QuizResultsViewModel) {
+        
+    }
     
-}
-
-func showNetworkError(message: String) {
+    func highlightImageBorder(isCorrectAnswer: Bool) {
+        
+    }
     
-}
-
+    func showLoadingIndicator() {
+        
+    }
+    
+    func hideLoadingIndicator() {
+        
+    }
+    
+    func showNetworkError(message: String) {
+        
+    }
+    
 }

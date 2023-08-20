@@ -1,8 +1,6 @@
 import UIKit
 
 final class MovieQuizViewController: UIViewController, MovieQuizViewControllerProtocol {
-    
-    
     // MARK: - свойства
     // т.к. в Attribute Inspector невозможно выбрать нужный шрифт -> нужны аутлеты для установки шрифта:
     @IBOutlet  weak var noButton: UIButton!
@@ -11,12 +9,10 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet  weak var imageView: UIImageView!
-    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     private var alertPresenter: AlertPresenterProtocol?
-    
-    private var presenter: MovieQuizPresenter! // шаг 2.7
+    private var presenter: MovieQuizPresenter!
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -33,11 +29,11 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
     }
     // MARK: - методы
     @IBAction private func noButtonClicked(_ sender: UIButton) {
-        presenter.noButtonClicked() // шаг 2.4
+        presenter.noButtonClicked()
     }
     
     @IBAction private func yesButtonClicked(_ sender: UIButton) {
-        presenter.yesButtonClicked() // шаг 2.4
+        presenter.yesButtonClicked()
     }
     
     func lockButtons() {
@@ -50,30 +46,28 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         self.imageView.layer.borderWidth = 0
     }
     
-    func show(quiz step: QuizStepViewModel) { // Шаг 2.4 - убрать private
+    func show(quiz step: QuizStepViewModel) {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
     }
     
-    // шаг 2.9
     func highlightImageBorder(isCorrectAnswer: Bool) {
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
-        
     }
     
-    func showResults(quiz result: QuizResultsViewModel) { // шаг 2.6
+    func showResults(quiz result: QuizResultsViewModel) {
         
         let message = presenter.makeResultMessage()
         let alertModel = AlertModel(title: "Этот раунд окончен!",
-                                    message: message, // шаг 2.8
+                                    message: message,
                                     buttonText: "Сыграть ещё раз") { [weak self] in
             guard let self = self else { return }
-            self.presenter.resetQuestionIndex() //Шаг 1.5
-            self.presenter.correctAnswers = 0 // шаг 2.6
-            self.presenter.restartGame()  // шаг 2.7
+            self.presenter.resetQuestionIndex()
+            self.presenter.correctAnswers = 0
+            self.presenter.restartGame()
             
         }
         alertPresenter?.show(alertModel: alertModel)
@@ -104,7 +98,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
                                buttonText: "Попробовать еще раз") { [weak self] in
             guard let self = self else { return }
             
-            self.presenter.resetQuestionIndex() // //Шаг 1.5
+            self.presenter.resetQuestionIndex()
             self.presenter.correctAnswers = 0
             self.presenter.restartGame()
         }
