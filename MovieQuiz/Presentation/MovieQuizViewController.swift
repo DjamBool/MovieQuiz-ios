@@ -40,6 +40,16 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         presenter.yesButtonClicked() // шаг 2.4
     }
     
+    func lockButtons() {
+        yesButton.isEnabled = false
+        noButton.isEnabled = false
+    }
+    func unlockButtons() {
+        yesButton.isEnabled = true
+        noButton.isEnabled = true
+        self.imageView.layer.borderWidth = 0
+    }
+    
     func show(quiz step: QuizStepViewModel) { // Шаг 2.4 - убрать private
         imageView.image = step.image
         textLabel.text = step.question
@@ -51,6 +61,7 @@ final class MovieQuizViewController: UIViewController, MovieQuizViewControllerPr
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
         imageView.layer.borderColor = isCorrectAnswer ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+        
     }
     
     func showResults(quiz result: QuizResultsViewModel) { // шаг 2.6

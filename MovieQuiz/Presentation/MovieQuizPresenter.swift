@@ -14,7 +14,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private var currentQuestionIndex: Int = 0 // шаг 1.3
     
     var currentQuestion: QuizQuestion? // шаг 2.1
-    private weak var viewController: MovieQuizViewController? // шаг 2.1
+    private weak var viewController: MovieQuizViewControllerProtocol? // шаг 2.1
     
     
     var correctAnswers: Int = 0 // шаг 2.5
@@ -24,7 +24,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     private let statisticService: StatisticService!
     
     // шаг 2.7
-    init(viewController: MovieQuizViewController) {
+    init(viewController: MovieQuizViewControllerProtocol) {
         self.viewController = viewController
         
         statisticService = StatisticServiceImplementation()   // Шаг 2.8
@@ -140,15 +140,14 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     func showAnswerResult(isCorrect: Bool) {
         didAnswer(isCorrectAnswer: isCorrect)
         viewController?.highlightImageBorder(isCorrectAnswer: isCorrect)
-        
+        viewController?.lockButtons()
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
-            //self.presenter.correctAnswers = self.correctAnswers
-            // self.presenter.questionFactory = self.questionFactory // шаг 2.7
+           
             self.showNextQuestionOrResults()
-            self.viewController?.noButton.isEnabled = true
-            self.viewController?.yesButton.isEnabled = true
-            self.viewController?.imageView.layer.borderWidth = 0
+            self.viewController?.unlockButtons()
+            
+           // self.viewController?.imageView.layer.borderWidth = 0
         }
     }
     
