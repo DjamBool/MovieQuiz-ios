@@ -20,7 +20,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     var correctAnswers: Int = 0 // шаг 2.5
     var questionFactory: QuestionFactoryProtocol? // шаг 2.5
     
-     // Шаг 2.8
+    // Шаг 2.8
     private let statisticService: StatisticService!
     
     // шаг 2.7
@@ -115,17 +115,17 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     // Шаг 2.8
-     func makeResultMessage() -> String {
+    func makeResultMessage() -> String {
         guard let statisticService = statisticService,
               let bestGame = statisticService.bestGame
         else {
             print("Результат неизвестен")
             return ""
         }
-         statisticService.store(correct: correctAnswers, total: questionsAmount)
-         
-//         let bestGame = statisticService.bestGame
-         
+        statisticService.store(correct: correctAnswers, total: questionsAmount)
+        
+        //         let bestGame = statisticService.bestGame
+        
         let currentCorrectAnswers = "Ваш результат: \(correctAnswers)/\(questionsAmount)"
         let numberOfTestsPlayed = "Количество сыгранных квизов: \(statisticService.gamesCount)"
         let bestResult = "Рекорд: \(bestGame.correct)/\(bestGame.total)" + " " + "\(bestGame.date.dateTimeString)"
@@ -144,7 +144,7 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
             guard let self = self else { return }
             //self.presenter.correctAnswers = self.correctAnswers
-           // self.presenter.questionFactory = self.questionFactory // шаг 2.7
+            // self.presenter.questionFactory = self.questionFactory // шаг 2.7
             self.showNextQuestionOrResults()
             self.viewController?.noButton.isEnabled = true
             self.viewController?.yesButton.isEnabled = true
@@ -153,9 +153,9 @@ final class MovieQuizPresenter: QuestionFactoryDelegate {
     }
     
     func didAnswer(isCorrectAnswer: Bool) {
-          if isCorrectAnswer {
-              correctAnswers += 1
-          }
-      }
+        if isCorrectAnswer {
+            correctAnswers += 1
+        }
+    }
 }
 
