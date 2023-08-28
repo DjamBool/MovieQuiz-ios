@@ -37,15 +37,3 @@ extension AlertPresenter: AlertPresenterProtocol {
     }
 }
 
-/*
- Алерт без протокола
- class AlertPresenter {
- weak var viewController = UIViewController()
- func showAlert(result: AlertModel) {
- let alert = UIAlertController(title: result.title, message: result.message, preferredStyle: .alert)
- let action = UIAlertAction(title: result.buttonText, style: .default, handler: nil)
- alert.addAction(action)
- viewController?.present(alert, animated: true)
- }
- }
- */
